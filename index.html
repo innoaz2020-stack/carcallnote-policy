@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>carCallnote (정비수첩) · 전화 오면 차량·정비이력·예약이 즉시 뜨는 정비소 전용 앱</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #151f32;
+      --surface-elevated: #1e293b;
+      --border: #2e3f5c;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #10b981;
+      --accent-soft: rgba(16, 185, 129, 0.14);
+      --warn: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-inline-size: 1200px;
+      margin-inline: auto;
+      padding-inline: 20px;
+    }
+
+    .navbar {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 20;
+      background: rgba(11, 17, 32, 0.9);
+      backdrop-filter: blur(10px);
+      border-block-end: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-block: 14px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.35rem;
+    }
+
+    .brand-badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #042f2e;
+    }
+
+    .btn-accent:hover {
+      background: #34d399;
+    }
+
+    .btn-outline {
+      background: var(--surface-elevated);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: #60a5fa;
+    }
+
+    .hero {
+      padding-block: 64px 52px;
+      background: radial-gradient(circle at 75% 20%, rgba(37, 99, 235, 0.22), transparent 55%),
+                  radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.14), transparent 50%);
+      border-block-end: 1px solid var(--border);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-block-end: 14px;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-block-end: 16px;
+    }
+
+    .hero p.lead {
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      margin-block-end: 24px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-block-end: 20px;
+    }
+
+    .hero-meta {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    .mockup-card {
+      background: #1e293b;
+      border: 2px solid #3b82f6;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+    }
+
+    .mockup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #93c5fd;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-block-end: 12px;
+    }
+
+    .mockup-inner {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mockup-plate {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .mockup-res-badge {
+      background: #064e3b;
+      color: #34d399;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 7px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .mockup-history {
+      color: #fbbf24;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .section {
+      padding-block: 56px;
+      border-block-end: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-block-end: 8px;
+      text-align: center;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-block-end: 36px;
+      font-size: 0.98rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feature-icon {
+      font-size: 1.6rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .pricing-signup-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+      align-items: start;
+    }
+
+    .price-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 2px solid #3b82f6;
+      border-radius: 18px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .price-tag {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #60a5fa;
+    }
+
+    .price-tag small {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.92rem;
+    }
+
+    .guide-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .guide-card h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .step-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .step-box strong {
+      color: #93c5fd;
+      font-size: 0.95rem;
+    }
+
+    .step-box p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+    }
+
+    footer {
+      padding-block: 32px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <div class="brand">
+        <span>🔧 carCallnote 정비수첩</span>
+        <span class="brand-badge">v1.0.0 정식 출시</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">핵심 기능</a>
+        <a href="#pricing">첫 달 무료 · 월 4,980원</a>
+        <a href="#start-guide">3단계 설치 안내</a>
+        <a href="./privacy-policy.html" target="_blank" rel="noopener">개인정보처리방침</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">첫 한 달 무료 체험 · 이후 월 4,980원 단일 요금제</span>
+        <h1>전화가 울리는 순간,<br />차량번호와 정비이력·예약이 즉시 뜹니다.</h1>
+        <p class="lead">
+          바쁜 작업 현장에서 누구 전화인지 고민하지 마세요. 한국 번호판 카메라 AI 인식부터
+          3초 간편 예약·문자 발송, 본인 구글 드라이브 일일 자동 백업까지 첫 한 달 무료로 시작하세요.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-accent" href="#start-guide">📱 Google Play 스토어 정식 출시 앱</a>
+          <a class="btn btn-primary" href="#start-guide">
+            🚀 첫 한 달 무료 체험 시작 방법
+          </a>
+        </div>
+        <p class="hero-meta">
+          ✓ 별도 회원가입·비밀번호 없음 · 삼성 갤럭시 (Android 10 ~ Android 16) 호환 · 개발자 서버 고객자료 수집 0%
+        </p>
+      </div>
+
+      <div class="mockup-card" aria-label="전화 수신 실시간 플로팅 팝업 화면 예시">
+        <div class="mockup-header">
+          <span>📞 carCallnote (정비수첩) · 010-1234-5678</span>
+          <span>닫기 ✕</span>
+        </div>
+        <div class="mockup-inner">
+          <div class="mockup-plate">123가 4567 &nbsp;|&nbsp; 현대 그랜저 (GN7)</div>
+          <div style="font-size: 0.9rem; color: #e2e8f0;">고객: 김철수 사장님 (합성유 5W-30 선호)</div>
+          <div class="mockup-res-badge">📅 [예약 고객] 오늘 14:00 · 엔진오일 세트</div>
+          <div class="mockup-history">최근 방문: 2026-10-20 · 엔진오일 세트, 에어컨 필터 (110,000원)</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="features">
+    <div class="container">
+      <h2 class="section-title">정비소 현장에서 가장 필요한 6가지 핵심 기능</h2>
+      <p class="section-sub">복잡한 PC 프로그램이나 회원가입 없이 사장님 스마트폰 하나로 모든 차량과 고객을 관리합니다.</p>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">📞</div>
+          <h3>1. 전화 수신 즉시 차량·정비·예약 팝업</h3>
+          <p>
+            등록된 고객에게 전화가 오면 화면 위에 차량번호, 차종, 직전 정비내역, 오늘 방문 예약 배지가 즉시 표시되며,
+            통화가 끝나면 자동으로 깔끔하게 닫힙니다.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">📷</div>
+          <h3>2. 한국 번호판 카메라 온디바이스 AI OCR</h3>
+          <p>
+            인터넷 연결 없이도 일반 흰색·신형 8자리·전기차 파란색·영업용 노란색·구형 녹색 번호판의 한글과 숫자를
+            기기 내부에서 즉시 인식하여 차량 이력으로 바로 연결합니다.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>3. 3초 간편 예약 &amp; 1탭 문자(SMS) 발송</h3>
+          <p>
+            통화 직후 [오늘/내일/모레] · [시간] · [정비항목] 버튼 3번만 누르면 예약 완료!
+            홈 최상단에 오늘/내일 예약 배너가 뜨며 고객에게 예약 확인 문자를 1탭으로 발송합니다.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🚘</div>
+          <h3>4. 국산·수입 94종 차종 카탈로그 &amp; 4자리 검색</h3>
+          <p>
+            차량번호 뒤 4자리나 전화번호 뒤 4자리만 입력해도 0.1초 만에 조회되며,
+            국산·수입 94종 대표 차종 카탈로그로 등록 시간을 대폭 줄여줍니다.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">☁️</div>
+          <h3>5. 이중 안전 백업 (구글 드라이브 &amp; AES-256)</h3>
+          <p>
+            사장님 동의 시 본인 구글 드라이브에 매일 가벼운 복구용 텍스트(.json)를 자동 백업하며,
+            사진까지 포함한 60만 회 PBKDF2 + AES-256-GCM 암호화 백업(.ccnbak)도 언제든 내보낼 수 있습니다.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>6. 최소 권한 원칙 &amp; 영업자료 유출 0%</h3>
+          <p>
+            통화기록 열람이나 전체 연락처 접근 권한을 요구하지 않으며, 고객 이름·전화번호·차량번호·정비금액은
+            개발자 서버로 단 1바이트도 전송되지 않습니다.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="container pricing-signup-grid">
+      <div class="price-card">
+        <span class="eyebrow" style="align-self:flex-start;">첫 한 달 무료 체험 · 다른 요금제 없음</span>
+        <h3>carCallnote 단일 월 정기구독</h3>
+        <div class="price-tag">월 4,980원 <small>(첫 1개월 무료 체험 · 부가세 포함)</small></div>
+        <p style="font-size:0.9rem; color:#cbd5e1;">
+          복잡한 등급 나누기 없이 첫 한 달 동안 모든 기능을 무료로 직접 써보신 뒤 결정하세요.
+        </p>
+        <ul class="check-list">
+          <li>✅ 첫 한 달(1개월) 전 기능 0원 무료 체험 (체험 기간 중 언제든 Google Play에서 해지 가능)</li>
+          <li>✅ 고객 · 차량 · 정비방문 이력 무제한 등록 및 뒤 4자리 초고속 통합 검색</li>
+          <li>✅ 통화 수신 시 차량·정비내역·방문예약 실시간 플로팅 팝업 (통화 종료 시 자동 닫힘)</li>
+          <li>✅ 한국 번호판 카메라 AI 자동 인식 &amp; 차량·정비 사진 무제한 보관</li>
+          <li>✅ 본인 구글 드라이브 매일 자동 텍스트 백업 &amp; AES-256 암호화 전체 백업/복원</li>
+          <li>✅ 구독 만료 후에도 기존에 저장된 모든 고객·차량·정비 기록과 사진 열람 100% 보존</li>
+        </ul>
+        <div style="margin-block-start:8px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-accent" href="#start-guide">📱 Google Play 스토어 정식 출시 앱</a>
+          <a class="btn btn-outline" href="./privacy-policy.html" target="_blank" rel="noopener">개인정보처리방침 보기</a>
+        </div>
+      </div>
+
+      <div class="guide-card" id="start-guide">
+        <h3>회원가입 없이 1분 만에 시작하기</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted);">
+          carCallnote는 외부 서버 계정을 만들지 않아 이메일·비밀번호 가입이 필요 없습니다. 앱 설치 후 Google Play 계정으로 즉시 첫 달 무료 체험을 시작하실 수 있습니다.
+        </p>
+
+        <div class="step-box">
+          <strong>1단계 · 앱 다운로드 및 설치</strong>
+          <p>Google Play 스토어에서 "정비수첩" 또는 "carCallnote"를 검색하여 스마트폰에 carCallnote를 설치합니다.</p>
+        </div>
+
+        <div class="step-box">
+          <strong>2단계 · 수신 팝업 필수 권한 2가지 켜기</strong>
+          <p>앱 우측 상단 [설정] 화면에서 ① 기본 발신번호 확인 앱 허용, ② 다른 앱 위에 표시 권한을 버튼 한 번으로 허용합니다.</p>
+        </div>
+
+        <div class="step-box">
+          <strong>3단계 · 첫 한 달 무료 체험 시작 (이후 월 4,980원)</strong>
+          <p>앱 내 [구독 시작] 버튼을 누르면 Google Play 결제를 통해 첫 1개월 무료 체험이 즉시 활성화됩니다. 다른 추가 요금제는 없습니다.</p>
+        </div>
+
+        <a class="btn btn-primary" href="./privacy-policy.html" style="inline-size: 100%; margin-block-start: 4px;">🔒 개인정보처리방침 및 사업자 정보 확인</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p><strong>carCallnote (정비수첩)</strong> · 첫 한 달 무료 체험 후 월 4,980원 단일 정기구독 · 개발자 서버 고객·영업 데이터 수집 0%</p>
+      <p style="margin-block-start:6px;">상호: 이노아즈 (innoAZ) &nbsp;|&nbsp; 대표자: 이철호 &nbsp;|&nbsp; 사업자등록번호: 269-24-00420 &nbsp;|&nbsp; 통신판매업신고번호: 제 2026-서울금천-2323 호</p>
+      <p style="margin-block-start:4px;">주소: 서울특별시 금천구 서부샛길 638, 4층 401-6호(가산동, 대륭테크노타운7차) &nbsp;|&nbsp; 고객문의: <a href="mailto:innoaz2020@gmail.com" style="text-decoration:underline;">innoaz2020@gmail.com</a> &nbsp;|&nbsp; <a href="./privacy-policy.html" style="text-decoration:underline;">개인정보처리방침</a></p>
+    </div>
+  </footer>
+</body>
+</html>
