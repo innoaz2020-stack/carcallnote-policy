@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>carCallnote (정비수첩) 개인정보처리방침</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #1d4ed8;
+      --shield-bg: #ecfdf5;
+      --shield-border: #10b981;
+      --shield-text: #065f46;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 32px 16px;
+    }
+    main {
+      max-inline-size: 860px;
+      margin-inline: auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    h1 { font-size: 1.6rem; font-weight: 800; color: var(--text); }
+    h2 { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-block-end: 8px; }
+    p, li { font-size: 0.95rem; color: var(--muted); }
+    ul { padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
+    .zero-box {
+      background: var(--shield-bg);
+      border: 1px solid var(--shield-border);
+      color: var(--shield-text);
+      padding: 18px 20px;
+      border-radius: 12px;
+    }
+    .zero-box strong { display: block; font-size: 1.02rem; margin-block-end: 6px; }
+    table {
+      inline-size: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-block-start: 8px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: start;
+    }
+    th { background: #f1f5f9; color: var(--text); font-weight: 700; }
+    footer {
+      border-block-start: 1px solid var(--border);
+      padding-block-start: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>carCallnote (정비수첩) 개인정보처리방침</h1>
+      <p>시행일자: 2026년 11월 11일 | 문서 버전: v1.1 (정식 출시본)</p>
+    </header>
+
+    <section class="zero-box" aria-label="영업 및 고객 자료 무수집 원칙">
+      <strong>🔒 핵심 원칙: 사장님의 영업·고객 자료는 개발자 서버로 절대 수집·전송하지 않습니다 (Zero-Customer-Data Policy)</strong>
+      <p style="color: #065f46;">
+        <strong>carCallnote (정비수첩)</strong>는 별도 회원가입이나 중앙 서버 없이 동작하는 로컬 중심 애플리케이션입니다. 사용자가 앱에 입력하는 고객 이름, 전화번호, 차량번호(번호판), 차종, 정비 방문·예약 이력, 정비 금액, 메모, 차량/정비 사진은 <strong>오직 사용자의 스마트폰 내부 저장소(및 사용자가 직접 동의·지정한 본인 개인 백업 경로)에만 보관</strong>되며, 개발자 또는 제3자의 서버로 단 1바이트도 수집·전송되지 않습니다.
+      </p>
+    </section>
+
+    <section>
+      <h2>1. 개인정보 및 영업자료의 보관 위치와 백업 방식</h2>
+      <ul>
+        <li><strong>회원가입 없음:</strong> 본 앱은 별도의 서버 계정 생성이나 로그인을 요구하지 않습니다.</li>
+        <li><strong>기기 내 단독 보관:</strong> 모든 고객·차량·정비·예약 기록(<code>carcallnote.db</code>)과 사진(<code>files/photos/</code>)은 사용자 단말기의 앱 전용 내부 저장소에만 저장되며, 사진 저장 시 위치 정보 등 원본 EXIF 메타데이터는 재인코딩 과정에서 자동 제거됩니다.</li>
+        <li><strong>수동 암호화 전체 백업(<code>.ccnbak</code>):</strong> 기기 변경·분실 대비 전체 백업 시 사용자가 직접 입력한 암호(8자 이상)를 기반으로 <code>PBKDF2-HMAC-SHA256</code>(600,000회 반복) 및 4MB 청크 단위 <code>AES-256-GCM</code> 방식으로 강력하게 암호화된 백업 파일이 생성됩니다.</li>
+        <li><strong>고객 동의 기반 본인 Google 드라이브 일일 텍스트 백업(<code>.json</code>):</strong> 사용자가 앱 내 안내를 확인하고 직접 동의 체크 및 파일 연결을 완료한 경우에 한하여, 사진을 제외한 복구용 텍스트 데이터(고객·전화번호·차량·정비·예약·메모)가 <strong>사용자 본인 계정의 Google 드라이브(SAF 문서 URI)</strong>에 비상 복구용 JSON 텍스트 파일로 저장됩니다. 개발자는 해당 드라이브나 파일에 일절 접근할 수 없으며, 암호화 보관을 원할 경우 언제든 자동 업로드를 끄고 <code>.ccnbak</code> 암호화 백업만 단독 사용할 수 있습니다.</li>
+        <li><strong>Android 운영체제 기본 기기 백업:</strong> 기기 변경 시 복원 편의를 위해 운영체제 기본 앱 데이터 백업에 텍스트 데이터베이스(<code>carcallnote.db</code>)가 포함될 수 있으며, 사진 폴더(<code>files/photos/</code>)·임시 백업·진단 로그는 동기화 대상에서 제외(<code>data_extraction_rules.xml</code>)됩니다.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. 기기 권한 사용 안내 및 최소 접근 원칙</h2>
+      <p style="margin-block-end: 8px;">
+        본 앱은 통화기록 열람(<code>READ_CALL_LOG</code>), 주소록 전체 읽기(<code>READ_CONTACTS</code>), 발신 통화 가로채기(<code>PROCESS_OUTGOING_CALLS</code>) 권한을 <strong>일절 요청하거나 포함하지 않습니다</strong>.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>권한 / 역할 명칭</th>
+            <th>사용 목적</th>
+            <th>개발자 서버 전송 여부</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>발신번호 확인 역할</strong><br/>(<code>ROLE_CALL_SCREENING</code>)</td>
+            <td>전화 수신 시 기기 내부 DB에 등록된 고객(현재 보유 차량 또는 방문 예약이 있는 고객)인지 기기 안에서만 대조하여 차량번호와 최근 정비 이력을 안내합니다. 통화를 차단하거나 거절하지 않습니다.</td>
+            <td><strong>전송 안 함 (0%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>다른 앱 위에 표시 및 알림</strong><br/>(<code>SYSTEM_ALERT_WINDOW</code>, <code>POST_NOTIFICATIONS</code>, <code>FOREGROUND_SERVICE_SPECIAL_USE</code>)</td>
+            <td>등록된 고객의 전화 수신 시 통화 화면 위에 이동·닫기가 가능한 차량 안내 카드를 표시합니다. 앱 설정에서 잠금화면 노출을 제한하면 잠금 상태에서는 고객명·차량번호를 숨긴 비공개 알림(<code>VISIBILITY_PRIVATE</code>)으로 보호합니다.</td>
+            <td><strong>전송 안 함 (0%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>통화 상태 확인</strong><br/>(<code>READ_PHONE_STATE</code>)</td>
+            <td>통화가 종료(<code>EXTRA_STATE_IDLE</code>)되었을 때 화면에 떠 있는 차량 안내 팝업과 알림을 자동으로 닫기 위해 사용합니다.</td>
+            <td><strong>전송 안 함 (0%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>카메라</strong><br/>(<code>CAMERA</code>)</td>
+            <td>기기 내(On-device) 한국어 번호판 OCR 문자 인식 및 차량/정비 사진 촬영에 사용합니다. 번호판 OCR 촬영 임시 파일은 번호 추출 직후 즉시 자동 삭제됩니다.</td>
+            <td><strong>전송 안 함 (0%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>연락처 단건 선택기</strong><br/>(시스템 <code>ACTION_PICK</code>)</td>
+            <td>전체 연락처 권한(<code>READ_CONTACTS</code>) 없이, 사용자가 시스템 선택기에서 직접 고른 전화번호 1건의 이름과 번호만 임시 URI 권한으로 입력란에 복사합니다.</td>
+            <td><strong>전송 안 함 (0%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>인앱 결제 및 네트워크</strong><br/>(<code>com.android.vending.BILLING</code>, <code>INTERNET</code>)</td>
+            <td>Google Play 스토어를 통한 단일 정기구독(<code>carcallnote_monthly_4980</code>, 첫 한 달 무료 체험 후 월 4,980원) 결제 승인 및 구독 권한 복원 검증에만 사용합니다. 결제 수단 정보는 Google Play가 처리하며 본 앱은 수집·보관하지 않습니다.</td>
+            <td>Google Play 공식 결제 검증만 수행</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>3. 비식별 작동·오류 카운터 진단 (고객 데이터 원천 배제)</h2>
+      <p>
+        앱 내 <strong>[설정 &gt; 작동 확인 · 에러 카운터 진단]</strong> 기능은 고객명·차량번호·전화번호 등 영업 자료를 일절 포함하지 않으며, 기기 내 정규식 마스킹 필터(<code>scrubSensitiveText</code>)를 통해 숫자열과 식별 패턴을 제거한 비식별 카운터(수신팝업·OCR·백업 작동 횟수 및 비식별 오류 코드)만 기기 내부에 기록합니다. 백그라운드에서 외부 분석 서버로 자동 전송하는 코드는 존재하지 않습니다.
+      </p>
+    </section>
+
+    <section>
+      <h2>4. 데이터의 파기 및 이용자 권리</h2>
+      <ul>
+        <li>사용자는 언제든지 앱 내에서 개별 고객, 차량, 정비 방문 내역, 예약, 사진을 즉시 수정하거나 영구 삭제할 수 있습니다.</li>
+        <li>정기구독을 해지하거나 무료 체험이 종료되더라도 기기에 이미 저장된 모든 데이터는 삭제되지 않고 그대로 열람·백업할 수 있습니다.</li>
+        <li>앱을 스마트폰에서 삭제(언인스톨)하면 앱 내부 저장소에 보관된 모든 데이터베이스와 사진은 운영체제에 의해 즉시 완전히 파기됩니다(단, 사용자가 직접 외부 폴더나 본인 Google 드라이브에 내보낸 백업 파일은 사용자가 직접 삭제할 수 있습니다).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. 개인정보 보호책임자 및 사업자 정보</h2>
+      <ul>
+        <li><strong>상호(운영사):</strong> 이노아즈 (innoAZ)</li>
+        <li><strong>대표자(개인정보 보호책임자):</strong> 이철호</li>
+        <li><strong>사업자등록번호:</strong> 269-24-00420</li>
+        <li><strong>통신판매업신고번호:</strong> 제 2026-서울금천-2323 호</li>
+        <li><strong>사업장 소재지:</strong> 서울특별시 금천구 서부샛길 638, 4층 401-6호(가산동, 대륭테크노타운7차)</li>
+        <li><strong>고객지원 및 개인정보 보호 문의 이메일:</strong> <a href="mailto:innoaz2020@gmail.com" style="color: var(--primary); text-decoration: underline;">innoaz2020@gmail.com</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>상호: 이노아즈 (innoAZ) | 대표자: 이철호 | 사업자등록번호: 269-24-00420 | 통신판매업신고번호: 제 2026-서울금천-2323 호</p>
+      <p style="margin-block-start: 4px;">주소: 서울특별시 금천구 서부샛길 638, 4층 401-6호(가산동, 대륭테크노타운7차) | 문의: innoaz2020@gmail.com</p>
+    </footer>
+  </main>
+</body>
+</html>
